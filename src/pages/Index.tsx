@@ -533,19 +533,25 @@ export default function Index() {
           </h2>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", maxWidth: "900px", margin: "0 auto" }}>
-          {[
-            { icon: "MessageCircle", label: "Discord", desc: "Официальный Discord сервера", color: "#5865F2" },
-            { icon: "Send", label: "Telegram", desc: "Новости и обновления", color: "var(--neon-green)" },
-            { icon: "Youtube", label: "YouTube", desc: "Ролики и стримы", color: "#FF0000" },
-            { icon: "HelpCircle", label: "Поддержка", desc: "Помощь и вопросы", color: "var(--neon-red)" },
-          ].map((contact) => (
+          {([
+            { icon: "MessageCircle", label: "Discord", desc: "Официальный Discord сервера", color: "#5865F2", url: "https://discord.gg/NSsDKdDkBT" },
+            { icon: "Send", label: "Telegram", desc: "Новости и обновления", color: "var(--neon-green)", url: "" },
+            { icon: "Youtube", label: "YouTube", desc: "Ролики и стримы", color: "#FF0000", url: "" },
+            { icon: "HelpCircle", label: "Поддержка", desc: "Помощь и вопросы", color: "var(--neon-red)", url: "" },
+          ] as { icon: string; label: string; desc: string; color: string; url: string }[]).map((contact) => (
             <div key={contact.label} className="dark-card donate-card" style={{ padding: "24px", borderRadius: "4px", textAlign: "center" }}>
               <div style={{ width: "48px", height: "48px", border: `1px solid ${contact.color}40`, borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                 <Icon name={contact.icon as "Send"} size={22} style={{ color: contact.color }} />
               </div>
               <h4 style={{ fontFamily: "Oswald", fontSize: "16px", letterSpacing: "0.08em", color: "#fff", marginBottom: "6px" }}>{contact.label}</h4>
               <p style={{ fontFamily: "Roboto", fontSize: "12px", color: "#555", marginBottom: "16px" }}>{contact.desc}</p>
-              <button className="neon-btn-red" style={{ padding: "8px 20px", fontSize: "12px", width: "100%" }}>Перейти</button>
+              <button
+                className="neon-btn-red"
+                style={{ padding: "8px 20px", fontSize: "12px", width: "100%", opacity: contact.url ? 1 : 0.4, cursor: contact.url ? "pointer" : "not-allowed" }}
+                onClick={() => contact.url && window.open(contact.url, "_blank")}
+              >
+                Перейти
+              </button>
             </div>
           ))}
         </div>
