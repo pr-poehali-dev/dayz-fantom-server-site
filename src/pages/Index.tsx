@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
+const SERVER_STATUS_URL = "https://functions.poehali.dev/53ac4386-29bb-4df3-b1d5-fc003a87ce62";
+
 const HERO_IMAGE = "https://cdn.poehali.dev/projects/008105f6-3e91-4af2-9be5-134840844579/files/a83e9d47-5731-4587-8d91-4319ca68ef4e.jpg";
 
 const KILL_FEED = [
@@ -74,15 +76,28 @@ export default function Index() {
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
+  const [maxPlayers, setMaxPlayers] = useState(60);
+  const [serverOnline, setServerOnline] = useState(true);
   const [chatMessages, setChatMessages] = useState(CHAT_MESSAGES);
   const [killFeed, setKillFeed] = useState(KILL_FEED);
   const [serverTime, setServerTime] = useState("14:23:07");
   const chatRef = useRef<HTMLDivElement>(null);
 
+  const fetchServerStatus = async () => {
+    try {
+      const res = await fetch(SERVER_STATUS_URL);
+      const data = await res.json();
+      setOnlineCount(data.players ?? 0);
+      setMaxPlayers(data.max_players ?? 60);
+      setServerOnline(data.online ?? false);
+    } catch {
+      setServerOnline(false);
+    }
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOnlineCount((prev) => Math.max(0, Math.min(60, prev + Math.floor(Math.random() * 3) - 1)));
-    }, 5000);
+    fetchServerStatus();
+    const interval = setInterval(fetchServerStatus, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -144,7 +159,7 @@ export default function Index() {
           </div>
           <div style={{ overflow: "hidden", flex: 1, position: "relative" }}>
             <div className="animate-ticker whitespace-nowrap" style={{ fontFamily: "Share Tech Mono, monospace", fontSize: "12px", color: "#aaa", padding: "0 20px" }}>
-              🔴 СЕРВЕР ОНЛАЙН — {onlineCount}/60 игроков &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🗺️ Карта: Chernarus+ &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎮 Версия: DayZ 1.29 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🌐 IP: 80.82.38.165:2302 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎁 Двойной опыт каждые выходные &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ⚡ Следующий рестарт через 2 часа
+              {serverOnline ? "🟢" : "🔴"} СЕРВЕР {serverOnline ? "ОНЛАЙН" : "ОФФЛАЙН"} — {onlineCount}/{maxPlayers} игроков &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🗺️ Карта: Chernarus+ &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎮 Версия: DayZ 1.29 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🌐 IP: 80.82.38.165:2302 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎁 Двойной опыт каждые выходные &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ⚡ Следующий рестарт через 2 часа
             </div>
           </div>
         </div>
@@ -193,7 +208,7 @@ export default function Index() {
           <div className="flex items-center gap-3">
             <div style={{ background: "rgba(0,255,65,0.08)", border: "1px solid rgba(0,255,65,0.3)", borderRadius: "3px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "6px" }}>
               <span className="online-dot"></span>
-              <span style={{ fontFamily: "Share Tech Mono", fontSize: "13px", color: "var(--neon-green)" }}>{onlineCount}/60</span>
+              <span style={{ fontFamily: "Share Tech Mono", fontSize: "13px", color: serverOnline ? "var(--neon-green)" : "#ff4444" }}>{onlineCount}/{maxPlayers}</span>
             </div>
             <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
               <Icon name={mobileMenuOpen ? "X" : "Menu"} size={22} />
@@ -234,7 +249,7 @@ export default function Index() {
 
             <div style={{ display: "flex", gap: "32px", justifyContent: "center", marginBottom: "40px", flexWrap: "wrap" }}>
               {[
-                { label: "Онлайн", value: `${onlineCount}/60` },
+                { label: "Онлайн", value: `${onlineCount}/${maxPlayers}` },
                 { label: "Порт", value: "2302" },
                 { label: "Карта", value: "Chernarus" },
                 { label: "Версия", value: "1.29" },
@@ -275,16 +290,19 @@ export default function Index() {
           {/* Server info */}
           <div className="dark-card" style={{ padding: "24px", borderRadius: "4px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-              <span className="online-dot" />
+              <span className={serverOnline ? "online-dot" : ""} style={!serverOnline ? { width: 8, height: 8, borderRadius: "50%", background: "#ff4444", display: "inline-block" } : {}} />
               <h3 style={{ fontFamily: "Oswald", fontSize: "16px", letterSpacing: "0.1em", color: "#fff", margin: 0 }}>СЕРВЕР FANTOM #1</h3>
+              <span style={{ marginLeft: "auto", fontFamily: "Share Tech Mono", fontSize: "10px", color: serverOnline ? "var(--neon-green)" : "#ff4444" }}>
+                {serverOnline ? "● ONLINE" : "● OFFLINE"}
+              </span>
             </div>
             <div style={{ marginBottom: "12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
                 <span style={{ fontFamily: "Share Tech Mono", fontSize: "12px", color: "#666" }}>ИГРОКИ</span>
-                <span style={{ fontFamily: "Share Tech Mono", fontSize: "12px", color: "var(--neon-green)" }}>{onlineCount}/60</span>
+                <span style={{ fontFamily: "Share Tech Mono", fontSize: "12px", color: "var(--neon-green)" }}>{onlineCount}/{maxPlayers}</span>
               </div>
               <div className="server-progress">
-                <div className="server-progress-fill" style={{ width: `${(onlineCount / 60) * 100}%` }} />
+                <div className="server-progress-fill" style={{ width: `${(onlineCount / maxPlayers) * 100}%` }} />
               </div>
             </div>
             {[

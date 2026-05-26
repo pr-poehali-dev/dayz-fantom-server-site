@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "Get DayZ server status",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": { "ip": "string" },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
