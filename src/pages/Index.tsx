@@ -73,7 +73,7 @@ const SECTION_IDS = ["hero", "online", "donate", "rules", "top", "about", "conta
 export default function Index() {
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [onlineCount, setOnlineCount] = useState(47);
+  const [onlineCount, setOnlineCount] = useState(0);
   const [chatMessages, setChatMessages] = useState(CHAT_MESSAGES);
   const [killFeed, setKillFeed] = useState(KILL_FEED);
   const [serverTime, setServerTime] = useState("14:23:07");
@@ -81,7 +81,7 @@ export default function Index() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setOnlineCount((prev) => Math.max(20, Math.min(64, prev + Math.floor(Math.random() * 3) - 1)));
+      setOnlineCount((prev) => Math.max(0, Math.min(60, prev + Math.floor(Math.random() * 3) - 1)));
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -144,7 +144,7 @@ export default function Index() {
           </div>
           <div style={{ overflow: "hidden", flex: 1, position: "relative" }}>
             <div className="animate-ticker whitespace-nowrap" style={{ fontFamily: "Share Tech Mono, monospace", fontSize: "12px", color: "#aaa", padding: "0 20px" }}>
-              🔴 СЕРВЕР ОНЛАЙН — {onlineCount}/64 игроков &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ⚔️ Wipe был 3 дня назад &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 💀 Топ-убийца сегодня: Fantom_Pro (47 фрагов) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎁 Двойной опыт каждые выходные &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ⚡ Следующий рестарт через 2 часа
+              🔴 СЕРВЕР ОНЛАЙН — {onlineCount}/60 игроков &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🗺️ Карта: Chernarus+ &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎮 Версия: DayZ 1.29 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🌐 IP: 80.82.38.165:2302 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🎁 Двойной опыт каждые выходные &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ⚡ Следующий рестарт через 2 часа
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function Index() {
           <div className="flex items-center gap-3">
             <div style={{ background: "rgba(0,255,65,0.08)", border: "1px solid rgba(0,255,65,0.3)", borderRadius: "3px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "6px" }}>
               <span className="online-dot"></span>
-              <span style={{ fontFamily: "Share Tech Mono", fontSize: "13px", color: "var(--neon-green)" }}>{onlineCount}/64</span>
+              <span style={{ fontFamily: "Share Tech Mono", fontSize: "13px", color: "var(--neon-green)" }}>{onlineCount}/60</span>
             </div>
             <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
               <Icon name={mobileMenuOpen ? "X" : "Menu"} size={22} />
@@ -234,10 +234,10 @@ export default function Index() {
 
             <div style={{ display: "flex", gap: "32px", justifyContent: "center", marginBottom: "40px", flexWrap: "wrap" }}>
               {[
-                { label: "Онлайн", value: `${onlineCount}/64` },
-                { label: "Слот", value: "2302" },
-                { label: "Карта", value: "Namalsk" },
-                { label: "Wipe", value: "3д назад" },
+                { label: "Онлайн", value: `${onlineCount}/60` },
+                { label: "Порт", value: "2302" },
+                { label: "Карта", value: "Chernarus" },
+                { label: "Версия", value: "1.29" },
               ].map((stat) => (
                 <div key={stat.label} style={{ textAlign: "center" }}>
                   <div style={{ fontFamily: "Share Tech Mono", fontSize: "22px", color: "var(--neon-red)", textShadow: "var(--neon-red-glow)" }}>{stat.value}</div>
@@ -281,18 +281,18 @@ export default function Index() {
             <div style={{ marginBottom: "12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
                 <span style={{ fontFamily: "Share Tech Mono", fontSize: "12px", color: "#666" }}>ИГРОКИ</span>
-                <span style={{ fontFamily: "Share Tech Mono", fontSize: "12px", color: "var(--neon-green)" }}>{onlineCount}/64</span>
+                <span style={{ fontFamily: "Share Tech Mono", fontSize: "12px", color: "var(--neon-green)" }}>{onlineCount}/60</span>
               </div>
               <div className="server-progress">
-                <div className="server-progress-fill" style={{ width: `${(onlineCount / 64) * 100}%` }} />
+                <div className="server-progress-fill" style={{ width: `${(onlineCount / 60) * 100}%` }} />
               </div>
             </div>
             {[
-              { label: "IP", value: "play.fantom-dayz.ru" },
+              { label: "IP", value: "80.82.38.165" },
               { label: "Порт", value: "2302" },
-              { label: "Карта", value: "Namalsk" },
+              { label: "Карта", value: "Chernarus+" },
               { label: "Время сервера", value: serverTime },
-              { label: "Версия", value: "DayZ 1.24" },
+              { label: "Версия", value: "DayZ 1.29" },
             ].map((item) => (
               <div key={item.label} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <span style={{ fontFamily: "Roboto", fontSize: "13px", color: "#555" }}>{item.label}</span>
