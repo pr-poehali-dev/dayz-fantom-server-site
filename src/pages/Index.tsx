@@ -536,7 +536,7 @@ export default function Index() {
           {([
             { icon: "MessageCircle", label: "Discord", desc: "Официальный Discord сервера", color: "#5865F2", url: "https://discord.gg/NSsDKdDkBT" },
             { icon: "Send", label: "Telegram", desc: "Новости и обновления", color: "var(--neon-green)", url: "" },
-            { icon: "Youtube", label: "YouTube", desc: "Ролики и стримы", color: "#FF0000", url: "" },
+            { icon: "Tv", label: "Twitch", desc: "Прямые трансляции", color: "#9146FF", url: "https://www.twitch.tv/texhag30p" },
             { icon: "HelpCircle", label: "Поддержка", desc: "Помощь и вопросы", color: "var(--neon-red)", url: "" },
           ] as { icon: string; label: string; desc: string; color: string; url: string }[]).map((contact) => (
             <div key={contact.label} className="dark-card donate-card" style={{ padding: "24px", borderRadius: "4px", textAlign: "center" }}>
